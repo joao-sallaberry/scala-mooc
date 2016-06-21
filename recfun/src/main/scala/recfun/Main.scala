@@ -28,7 +28,7 @@ object Main {
 
     def balance(count: Int, chars: List[Char]): Boolean =
       if (count < 0) false
-      else if (chars.isEmpty) true
+      else if (chars.isEmpty) count == 0
       else balance(count + scoreChar(chars.head), chars.tail)
 
     balance(0, chars)
