@@ -110,5 +110,61 @@ class FunSetSuite extends FunSuite {
     }
   }
 
+  trait TestUnionSets extends TestSets{
+      val u1 = union(s1, s2)
+      val u2 = union(s2, s3)
+  }
 
+  test("intersect contains only common values") {
+    new TestUnionSets {
+      val inter = intersect(u1, u2)
+      assert(!contains(inter, 1), "Intersect 1")
+      assert(contains(inter, 2), "Intersect 2")
+      assert(!contains(inter, 3), "Intersect 3")
+    }
+  }
+
+  test("difference of sets") {
+    new TestUnionSets {
+      val d = diff(u1, u2)
+      assert(contains(d, 1), "Diff 1")
+      assert(!contains(d, 2), "Diff 2")
+      assert(!contains(d, 3), "Diff 3")
+    }
+  }
+
+  test("filtering sets") {
+    new TestUnionSets {
+      val f1 = filter(u1, (x: Int) => false)
+      val f2 = filter(u1, (x: Int) => x == 1)
+      assert(!contains(f1, 2), "Filter 1-2")
+      assert(!contains(f1, 2), "Filter 1-3")
+      assert(contains(f2, 1), "Filter 2-1")
+      assert(!contains(f2, 2), "Filter 2-2")
+    }
+  }
+
+  test("predicate is true forall members in a set") {
+    new TestUnionSets {
+      assert(forall(u1, (x: Int) => (x > 0) & (x < 3)), "Forall 0 ~ 3")
+      assert(!forall(u1, (x: Int) => x > 1), "Forall > 1")
+    }
+  }
+
+  test("exists at least one element that satisfies predicate") {
+    new TestUnionSets {
+      assert(exists(u1, (x: Int) => x > 1), "Exists > 1")
+      assert(!exists(u1, (x: Int) => x > 2), "Exists > 2")
+    }
+  }
+
+  test("maps a function to all elements in a set") {
+    new TestUnionSets {
+      val m1 = map(u1, (x: Int) => x * 3)
+      assert(!contains(m1, 1), "Map 1 has 1")
+      assert(contains(m1, 3), "Map 1 has 3")
+      assert(contains(m1, 6), "Map 1 has 6")
+      assert(!contains(m1, 7), "Map 1 has 7")
+    }
+  }
 }
