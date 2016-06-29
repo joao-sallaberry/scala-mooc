@@ -144,7 +144,7 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
   }
 
   override def union(that: TweetSet): TweetSet =
-    ((that union left) union right) incl elem
+    (left union (right union that)) incl elem
 
   def isEmpty: Boolean = false
 
